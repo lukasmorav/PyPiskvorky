@@ -8,9 +8,15 @@ VYSKA = 600
 SIRKA = 600
 VELIKOST_POLICKA = 200
 SIRKA_CARY = 15
+KOLECKO_R = 60
+KOLECKO_T = 15
+KRIZEK_T = 25
+MEZERA = 55
 
 BG_BARVA = (28, 170, 156)
 BARVA_CARY = (23, 145, 135)
+BARVA_KOLECKA = (239, 231, 200)
+BARVA_KRIZKU = (66, 66, 66)
 
 #Hlavni okenko
 screen = pygame.display.set_mode((SIRKA, VYSKA))
@@ -27,6 +33,15 @@ def priprav_pole():
     #vertikalní čáry
     pygame.draw.line(screen, BARVA_CARY, (VELIKOST_POLICKA, 0), (VELIKOST_POLICKA, VYSKA), SIRKA_CARY)
     pygame.draw.line(screen, BARVA_CARY, (2 * VELIKOST_POLICKA, 0), (2 * VELIKOST_POLICKA, VYSKA), SIRKA_CARY)
+
+def update_pole ():
+    for radek in range(3):
+        for sloupec in range(3):
+            if pole[radek][sloupec] == 1:
+                pygame.draw.circle( screen, BARVA_KOLECKA, (int(sloupec * VELIKOST_POLICKA + VELIKOST_POLICKA//2), int(radek * VELIKOST_POLICKA + VELIKOST_POLICKA//2)), KOLECKO_R, KOLECKO_T)
+            elif pole[radek][sloupec] == 2:
+                pygame.draw.line( screen, BARVA_KRIZKU, (sloupec * VELIKOST_POLICKA + MEZERA, (radek + 1) * VELIKOST_POLICKA - MEZERA), ((sloupec + 1) * VELIKOST_POLICKA - MEZERA, radek * VELIKOST_POLICKA + MEZERA), KRIZEK_T)
+                pygame.draw.line( screen, BARVA_KRIZKU, (sloupec * VELIKOST_POLICKA + MEZERA, radek * VELIKOST_POLICKA + MEZERA), ((sloupec + 1) * VELIKOST_POLICKA - MEZERA, (radek + 1) * VELIKOST_POLICKA - MEZERA), KRIZEK_T)
 
 def oznac_policko(radek, sloupec, hrac):
     pole[radek][sloupec] = hrac
@@ -55,8 +70,8 @@ while True:
             mysX = event.pos[0]
             mysY = event.pos[1]
 
-            radek = int(mysX // VELIKOST_POLICKA)
-            sloupec = int(mysY // VELIKOST_POLICKA)
+            sloupec = int(mysX // VELIKOST_POLICKA)
+            radek = int(mysY // VELIKOST_POLICKA)
 
             if je_volne_policko(radek, sloupec):
                 if hrac == 1:
@@ -67,5 +82,5 @@ while True:
                     hrac = 1
 
 
-
+    update_pole()
     pygame.display.update()
